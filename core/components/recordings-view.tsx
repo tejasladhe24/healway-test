@@ -26,10 +26,9 @@ import {
 import { useRecordings } from "../hooks/use-recordings";
 import { Recording } from "@/types";
 import { AudioRecorder } from "./recorder";
-import moment from "moment";
 
 export const AudioRecordingsList = () => {
-  const { recordings, loading } = useRecordings();
+  const { recordings, loading, hasMore, loadMore } = useRecordings();
 
   const [currentlyPlaying, setCurrentlyPlaying] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -131,61 +130,61 @@ export const AudioRecordingsList = () => {
           </div>
         )}
 
-        {
-          <div className="space-y-3">
-            {recordings.map((recording) => (
-              <Card key={recording.id} className="overflow-hidden">
-                <CardContent className="p-0">
-                  <div className="flex items-center p-4">
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-base font-medium truncate">
-                        {recording.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        {recording.duration.toFixed(0)} s
-                      </p>
-                    </div>
-                    <div className="flex items-center space-x-2 ml-4">
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => handlePlay(recording.id, recording.url)}
-                        aria-label={
-                          isPlaying && currentlyPlaying === recording.id
-                            ? "Pause"
-                            : "Play"
-                        }
-                      >
-                        {isPlaying && currentlyPlaying === recording.id ? (
-                          <Pause className="h-4 w-4" />
-                        ) : (
-                          <Play className="h-4 w-4" />
-                        )}
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => openRenameDialog(recording)}
-                        aria-label="Rename"
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => openDeleteDialog(recording)}
-                        aria-label="Delete"
-                        className="text-destructive hover:bg-destructive/10"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
+        <div className="space-y-3">
+          {recordings.map((recording) => (
+            <Card key={recording.id} className="overflow-hidden">
+              <CardContent className="p-0">
+                <div className="flex items-center p-4">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-base font-medium truncate">
+                      {recording.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      {recording.duration.toFixed(0)} s
+                    </p>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        }
+                  <div className="flex items-center space-x-2 ml-4">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => handlePlay(recording.id, recording.url)}
+                      aria-label={
+                        isPlaying && currentlyPlaying === recording.id
+                          ? "Pause"
+                          : "Play"
+                      }
+                    >
+                      {isPlaying && currentlyPlaying === recording.id ? (
+                        <Pause className="h-4 w-4" />
+                      ) : (
+                        <Play className="h-4 w-4" />
+                      )}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => openRenameDialog(recording)}
+                      aria-label="Rename"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => openDeleteDialog(recording)}
+                      aria-label="Delete"
+                      className="text-destructive hover:bg-destructive/10"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {hasMore && !loading && <button onClick={loadMore}>Load More</button>}
 
         {/* Rename Dialog */}
         <Dialog open={renameDialogOpen} onOpenChange={setRenameDialogOpen}>

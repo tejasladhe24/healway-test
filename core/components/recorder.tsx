@@ -4,12 +4,14 @@ import { useAudioRecorder } from "@/core/hooks/use-recorder";
 import { Button } from "./ui/button";
 
 export const AudioRecorder = () => {
-  const { recording, audioURL, startRecording, stopRecording } =
-    useAudioRecorder();
+  const { recording, startRecording, stopRecording } = useAudioRecorder();
 
   return (
-    <Button onClick={recording ? stopRecording : startRecording}>
-      {recording ? "Stop Recording" : "Start Recording"}
+    <Button
+      variant={recording ? "destructive" : "outline"}
+      onClick={recording ? stopRecording : startRecording}
+    >
+      {recording ? "Stop Recording" : "Start New Recording"}
     </Button>
   );
 };
