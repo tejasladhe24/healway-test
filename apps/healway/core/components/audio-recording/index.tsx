@@ -163,16 +163,6 @@ export const AudioRecording = ({ recordingId }: { recordingId: string }) => {
                     <Play className="h-4 w-4" />
                   )}
                 </Button>
-                {recording?.transcriptionId && (
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => openTranscription(recording)}
-                    aria-label="Rename"
-                  >
-                    <Text className="h-4 w-4" />
-                  </Button>
-                )}
 
                 {recording && (
                   <Button
