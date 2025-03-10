@@ -1,0 +1,35 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "start": {
+      "cache": false,
+      "persistent": true
+    }
+  },
+  "globalDependencies": ["pyproject.toml", "package.json", "turbo.json"],
+  "globalEnv": [
+    "AUTH_DATABASE_URL",
+    "APP_DATABASE_URL",
+    "REGISTRY_DATABASE_URL",
+    "AUTH_SECRET",
+    "AXON_APP_URL",
+    "NEXT_PUBLIC_AXON_APP_URL",
+    "DOCS_APP_URL",
+    "NEXT_PUBLIC_DOCS_APP_URL",
+    "AUTH_APP_URL",
+    "NEXT_PUBLIC_AUTH_APP_URL",
+    "DIAGRAMS_APP_URL",
+    "NEXT_PUBLIC_DIAGRAMS_APP_URL",
+    "BACKEND_APP_URL",
+    "NEXT_PUBLIC_BACKEND_APP_URL"
+  ]
+}
