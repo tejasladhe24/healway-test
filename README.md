@@ -13,6 +13,7 @@ This is the monorepo for the Healway project, containing both a Next.js app and 
 ### Prerequisites
 
 - Node.js (v14 or higher)
+- Bun.js (v1.2.x)
 - Yarn (v1.22 or higher)
 - Python (v3.8 or higher)
 
