@@ -10,8 +10,7 @@
     "link-env:prod": "bun link-envs.ts prod",
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "start": "turbo run start",
-    "setup": "yarn && turbo run setup"
+    "start": "turbo run start"
   },
   "devDependencies": {
     "turbo": "^2.4.2"

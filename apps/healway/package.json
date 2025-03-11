@@ -39,7 +39,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",
-    "concurrently": "^9.1.2",
     "date-fns": "^4.1.0",
     "elevenlabs": "^1.54.0",
     "embla-carousel-react": "^8.5.2",

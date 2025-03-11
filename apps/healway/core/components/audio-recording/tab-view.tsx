@@ -24,6 +24,7 @@ import { transcribeAudio } from "@/core/client-side-handlers/transcribe";
 import { summarizeText } from "@/core/client-side-handlers/summarize";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/core/provider/session-provider";
 
 export function AudioRecordingTabView({
   recording,
@@ -34,6 +35,7 @@ export function AudioRecordingTabView({
 }) {
   const [loadingTranscribe, setLoadingTranscribe] = useState<boolean>(false);
   const [loadingSummary, setLoadingSummary] = useState<boolean>(false);
+  const { user } = useAuth();
 
   return (
     <Tabs defaultValue="transcription" className="w-full h-full">
@@ -55,7 +57,7 @@ export function AudioRecordingTabView({
               onClick={async () => {
                 if (recording) {
                   setLoadingTranscribe(true);
-                  await transcribeAudio(recording?.id);
+                  await transcribeAudio(recording?.id, user);
                   setLoadingTranscribe(false);
                 }
               }}
@@ -88,7 +90,7 @@ export function AudioRecordingTabView({
               onClick={async () => {
                 if (recording && recording.transcriptionId) {
                   setLoadingSummary(true);
-                  await summarizeText(recording?.transcriptionId);
+                  await summarizeText(recording?.transcriptionId, user);
                   setLoadingSummary(false);
                 }
               }}
