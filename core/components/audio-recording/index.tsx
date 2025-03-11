@@ -31,6 +31,7 @@ import { cn } from "../../lib/utils";
 import { useRecording } from "../../hooks/use-recording";
 import { AudioRecordingTabView } from "./tab-view";
 import { useAuth } from "@/core/provider/session-provider";
+import { useRouter } from "next/navigation";
 
 export const AudioRecording = ({ recordingId }: { recordingId: string }) => {
   const { loading, recording, transcription } = useRecording({ recordingId });
@@ -41,6 +42,7 @@ export const AudioRecording = ({ recordingId }: { recordingId: string }) => {
   const [newName, setNewName] = useState("");
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { user } = useAuth();
+  const router = useRouter();
 
   const handlePlay = () => {
     // Toggle play/pause for current audio
@@ -93,6 +95,7 @@ export const AudioRecording = ({ recordingId }: { recordingId: string }) => {
 
       setDeleteDialogOpen(false);
       toast.info("Recording deleted");
+      router.replace("/recordings");
     } catch (err) {
       console.error("Error deleting recording:", err);
       toast.error("Failed to delete recording");
