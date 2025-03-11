@@ -17,9 +17,6 @@ export const AudioRecorder = () => {
       >
         {recording ? "Stop Recording" : "Start New Recording"}
       </Button>
-      <Button size={"icon"} onClick={() => onOpen("settings")}>
-        <Settings2 />
-      </Button>
     </div>
   );
 };
