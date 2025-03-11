@@ -14,7 +14,6 @@ import {
 } from "@/core/components/ui/sidebar";
 import { Logo } from "../logo";
 
-// This is sample data.
 const data = {
   navMain: [
     {

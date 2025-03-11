@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { SettingsModal } from "../components/modals/settings";
-// import { RenameRecordingModal } from "../components/modals/rename-recording";
-// import { DeleteRecordingModal } from "../components/modals/delete-recording";
 
 export const ModalProvider = () => {
   const [mounted, setMounted] = useState(false);
@@ -17,8 +15,6 @@ export const ModalProvider = () => {
   return (
     <>
       <SettingsModal />
-      {/* <RenameRecordingModal />
-      <DeleteRecordingModal /> */}
     </>
   );
 };

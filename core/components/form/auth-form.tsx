@@ -15,19 +15,19 @@ export const AuthForm = () => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
-        router.push("/recordings"); // Redirect after login
+        router.push("/recordings");
       } else {
         setUser(null);
       }
     });
 
-    return () => unsubscribe(); // Cleanup listener
+    return () => unsubscribe();
   }, [router]);
 
   const handleLogin = async () => {
     try {
       await signInWithPopup(auth, provider);
-      router.push("/"); // Ensure redirect happens after login
+      router.push("/");
     } catch (error) {
       console.error("Login error:", error);
     }

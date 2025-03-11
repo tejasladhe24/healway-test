@@ -30,10 +30,9 @@ export const useAudioRecorder = () => {
 
         const duration = startTimeRef.current
           ? (Date.now() - startTimeRef.current) / 1000
-          : 0; // Duration in seconds
+          : 0;
         const recordingId = `${user?.uid}-${Date.now()}`;
 
-        // Upload to Firebase Storage
         await uploadBytes(fileRef, audioBlob);
         const url = await getDownloadURL(fileRef);
 
@@ -46,7 +45,6 @@ export const useAudioRecorder = () => {
           updatedAt: new Date(),
         };
 
-        // Store URL in Firestore
         await setDoc(doc(db, "audio-recordings", recordingId), {
           ...newRecording,
           userId: user?.uid, // Store user ID for ownership tracking

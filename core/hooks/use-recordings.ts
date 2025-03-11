@@ -37,8 +37,6 @@ export const useRecordings = () => {
       const q = query(
         collection(db, "audio-recordings"),
         where("userId", "==", user.uid)
-        // orderBy("createdAt", "desc"), // Order by creation date
-        // limit(PAGE_SIZE)
       );
 
       unsubscribeFirestore = onSnapshot(q, (querySnapshot) => {
@@ -63,7 +61,6 @@ export const useRecordings = () => {
     };
   }, []);
 
-  // Function to fetch next page
   const loadMore = async () => {
     if (!lastDoc || !user) return;
 

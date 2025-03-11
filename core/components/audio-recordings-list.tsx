@@ -58,7 +58,6 @@ export const AudioRecordingsList = () => {
 
   const handlePlay = (id: string, url: string) => {
     if (currentlyPlaying === id) {
-      // Toggle play/pause for current audio
       if (isPlaying) {
         audioRef.current?.pause();
         setIsPlaying(false);
@@ -67,15 +66,12 @@ export const AudioRecordingsList = () => {
         setIsPlaying(true);
       }
     } else {
-      // Play a new audio
       if (audioRef.current) {
         audioRef.current.pause();
       }
 
       setCurrentlyPlaying(id);
 
-      // In a real app, we would set the src to the actual audio file
-      // For this example, we'll just simulate playback
       audioRef.current = new Audio(url);
       audioRef.current.onended = () => {
         setIsPlaying(false);
@@ -84,7 +80,6 @@ export const AudioRecordingsList = () => {
 
       audioRef.current.play().catch((error) => {
         console.error("Error playing audio:", error);
-        // In a real app, we would handle playback errors appropriately
       });
 
       setIsPlaying(true);
@@ -125,7 +120,6 @@ export const AudioRecordingsList = () => {
     }
 
     if (selectedRecording) {
-      // Stop playback if deleting the currently playing recording
       if (currentlyPlaying === selectedRecording.id) {
         audioRef.current?.pause();
         setIsPlaying(false);
@@ -243,7 +237,6 @@ export const AudioRecordingsList = () => {
           </Button>
         )}
 
-        {/* Rename Dialog */}
         <Dialog open={renameDialogOpen} onOpenChange={setRenameDialogOpen}>
           <DialogContent>
             <DialogHeader>
@@ -271,7 +264,6 @@ export const AudioRecordingsList = () => {
           </DialogContent>
         </Dialog>
 
-        {/* Delete Confirmation Dialog */}
         <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
           <AlertDialogContent>
             <AlertDialogHeader>

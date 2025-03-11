@@ -45,7 +45,6 @@ export const AudioRecording = ({ recordingId }: { recordingId: string }) => {
   const router = useRouter();
 
   const handlePlay = () => {
-    // Toggle play/pause for current audio
     if (isPlaying) {
       audioRef.current?.pause();
       setIsPlaying(false);
@@ -85,7 +84,6 @@ export const AudioRecording = ({ recordingId }: { recordingId: string }) => {
       return toast.error("You must be logged in to delete a recording?.");
     }
 
-    // Stop playback if deleting the currently playing recording
     audioRef.current?.pause();
     setIsPlaying(false);
 
@@ -181,7 +179,6 @@ export const AudioRecording = ({ recordingId }: { recordingId: string }) => {
           </CardContent>
         </Card>
 
-        {/* Rename Dialog */}
         <Dialog open={renameDialogOpen} onOpenChange={setRenameDialogOpen}>
           <DialogContent>
             <DialogHeader>
@@ -209,7 +206,6 @@ export const AudioRecording = ({ recordingId }: { recordingId: string }) => {
           </DialogContent>
         </Dialog>
 
-        {/* Delete Confirmation Dialog */}
         <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
           <AlertDialogContent>
             <AlertDialogHeader>
