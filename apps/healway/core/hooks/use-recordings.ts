@@ -12,6 +12,7 @@ import {
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "@/core/lib/firebase-utils";
 import { Recording } from "@/types";
+import { useAuth } from "../provider/session-provider";
 
 const PAGE_SIZE = 10;
 
@@ -20,6 +21,7 @@ export const useRecordings = () => {
   const [loading, setLoading] = useState(true);
   const [lastDoc, setLastDoc] = useState<any>(null);
   const [hasMore, setHasMore] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     let unsubscribeFirestore: (() => void) | null = null;
@@ -63,13 +65,13 @@ export const useRecordings = () => {
 
   // Function to fetch next page
   const loadMore = async () => {
-    if (!lastDoc || !auth.currentUser) return;
+    if (!lastDoc || !user) return;
 
     setLoading(true);
 
     const nextQuery = query(
       collection(db, "audio-recordings"),
-      where("userId", "==", auth.currentUser.uid),
+      where("userId", "==", user.uid),
       orderBy("createdAt", "desc"),
       startAfter(lastDoc),
       limit(PAGE_SIZE)

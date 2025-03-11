@@ -4,10 +4,13 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../lib/firebase-utils";
 import { toast } from "sonner";
 import { Summary, Transcription } from "@/types";
+import { User } from "firebase/auth";
 
-export const summarizeText = async (transcriptionId: string) => {
-  console.log("summarizeText", transcriptionId);
-  if (!auth.currentUser) {
+export const summarizeText = async (
+  transcriptionId: string,
+  user: User | null
+) => {
+  if (!user) {
     return toast.error("You must be logged in to transcribe a recording?.");
   }
 

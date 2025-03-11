@@ -30,9 +30,12 @@ import {
   useSidebar,
 } from "@/core/components/ui/sidebar";
 import { auth } from "@/core/lib/firebase-utils";
+import Link from "next/link";
+import { useAuth } from "@/core/provider/session-provider";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
+  const { user } = useAuth();
 
   return (
     <SidebarMenu>
@@ -45,18 +48,16 @@ export function NavUser() {
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage
-                  src={auth.currentUser?.photoURL || ""}
-                  alt={auth.currentUser?.displayName || ""}
+                  src={user?.photoURL || ""}
+                  alt={user?.displayName || ""}
                 />
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">
-                  {auth.currentUser?.displayName}
+                  {user?.displayName}
                 </span>
-                <span className="truncate text-xs">
-                  {auth.currentUser?.email}
-                </span>
+                <span className="truncate text-xs">{user?.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -71,25 +72,28 @@ export function NavUser() {
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage
-                    src={auth.currentUser?.photoURL || ""}
-                    alt={auth.currentUser?.displayName || ""}
+                    src={user?.photoURL || ""}
+                    alt={user?.displayName || ""}
                   />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">
-                    {auth.currentUser?.displayName}
+                    {user?.displayName}
                   </span>
-                  <span className="truncate text-xs">
-                    {auth.currentUser?.email}
-                  </span>
+                  <span className="truncate text-xs">{user?.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => auth.signOut()}>
-              <LogOut />
-              Log out
+            <DropdownMenuItem>
+              <Link
+                href={"/auth/sign-out"}
+                className="flex items-center gap-2 py-2 text-sm"
+              >
+                <LogOut />
+                Log out
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

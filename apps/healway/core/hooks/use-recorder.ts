@@ -2,9 +2,10 @@
 
 import { useState, useRef } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { addDoc, collection, doc, setDoc, Timestamp } from "firebase/firestore";
-import { storage, db, auth } from "@/core/lib/firebase-utils";
+import { doc, setDoc, Timestamp } from "firebase/firestore";
+import { storage, db } from "@/core/lib/firebase-utils";
 import { Recording } from "@/types";
+import { useAuth } from "../provider/session-provider";
 
 export const useAudioRecorder = () => {
   const [recording, setRecording] = useState<boolean>(false);
@@ -12,6 +13,7 @@ export const useAudioRecorder = () => {
   const mediaRecorder = useRef<MediaRecorder | null>(null);
   const audioChunks = useRef<Blob[]>([]);
   const startTimeRef = useRef<number | null>(null);
+  const { user } = useAuth();
 
   const startRecording = async () => {
     try {
@@ -29,7 +31,7 @@ export const useAudioRecorder = () => {
         const duration = startTimeRef.current
           ? (Date.now() - startTimeRef.current) / 1000
           : 0; // Duration in seconds
-        const recordingId = `${auth.currentUser?.uid}-${Date.now()}`;
+        const recordingId = `${user?.uid}-${Date.now()}`;
 
         // Upload to Firebase Storage
         await uploadBytes(fileRef, audioBlob);
@@ -47,7 +49,7 @@ export const useAudioRecorder = () => {
         // Store URL in Firestore
         await setDoc(doc(db, "audio-recordings", recordingId), {
           ...newRecording,
-          userId: auth.currentUser?.uid, // Store user ID for ownership tracking
+          userId: user?.uid, // Store user ID for ownership tracking
           createdAt: Timestamp.fromDate(newRecording.createdAt),
           updatedAt: Timestamp.fromDate(newRecording.updatedAt),
         });

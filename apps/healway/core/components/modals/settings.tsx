@@ -15,10 +15,21 @@ import {
 import { toast } from "sonner";
 import { useModal } from "@/core/hooks/use-modal";
 import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { auth, db } from "@/core/lib/firebase-utils";
 import { useSettings } from "@/core/hooks/use-settings";
 import { useEffect } from "react";
+import { useAuth } from "@/core/provider/session-provider";
 
 const schema = z.object({
   enableLiveTranscription: z.boolean().default(false).optional(),
@@ -29,6 +40,7 @@ type InputType = z.infer<typeof schema>;
 export function SettingsModal() {
   const { onClose, isOpen, type } = useModal();
   const { settings } = useSettings();
+  const { user } = useAuth();
 
   useEffect(() => {
     console.log("settings", settings);
@@ -43,26 +55,33 @@ export function SettingsModal() {
     },
   });
 
-  const onSubmit = async ({ enableLiveTranscription }: InputType) => {
-    if (!auth.currentUser) {
+  const onSubmit = async (values: InputType) => {
+    if (!user) {
       toast.error("You must be logged in to save settings");
       return;
     }
 
-    const userId = auth.currentUser.uid;
+    const userId = user.uid;
     console.log("Saving settings for user:", userId);
 
     try {
-      const docRef = doc(db, "settings", userId);
-      const currentDoc = await getDoc(docRef);
+      const settingsCollection = collection(db, "settings");
 
-      if (currentDoc.exists()) {
-        await updateDoc(docRef, { enableLiveTranscription });
+      const q = query(settingsCollection, where("userId", "==", userId));
+      const snapshot = await getDocs(q);
+
+      if (!snapshot.empty) {
+        const existingDoc = snapshot.docs[0]; // Get the first matching document
+        const docRef = doc(db, "settings", existingDoc.id);
+
+        await updateDoc(docRef, settings);
       } else {
-        await setDoc(docRef, {
+        const newSettings = {
           userId,
-          enableLiveTranscription,
-        });
+          ...values,
+        };
+
+        await addDoc(settingsCollection, newSettings);
       }
 
       toast.info("Settings saved!");

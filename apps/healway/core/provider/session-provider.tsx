@@ -31,7 +31,15 @@ export const SessionProvider = ({
   const [_user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    setUser(auth.currentUser);
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        window.location.href = "/auth";
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
   return (

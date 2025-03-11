@@ -2,12 +2,15 @@
 
 import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { transcribe } from "../lib/transcribe";
-import { auth, db } from "../lib/firebase-utils";
+import { db } from "../lib/firebase-utils";
 import { toast } from "sonner";
-import { Recording, Transcription } from "@/types";
+import { User } from "firebase/auth";
 
-export const transcribeAudio = async (recordingId: string) => {
-  if (!auth.currentUser) {
+export const transcribeAudio = async (
+  recordingId: string,
+  user: User | null
+) => {
+  if (!user) {
     return toast.error("You must be logged in to transcribe a recording?.");
   }
 
@@ -15,7 +18,7 @@ export const transcribeAudio = async (recordingId: string) => {
 
   try {
     const { words, ...rest } = await transcribe(recordingId);
-    data = { userId: auth.currentUser.uid, recordingId, ...rest };
+    data = { userId: user.uid, recordingId, ...rest };
 
     const collectionRef = collection(db, "transcriptions");
     const newTranscript = await addDoc(collectionRef, data);
@@ -28,29 +31,4 @@ export const transcribeAudio = async (recordingId: string) => {
     toast.error("Failed to transcribe audio");
     return;
   }
-};
-
-export const openTranscription = async (recording: Recording) => {
-  if (!auth.currentUser) {
-    return toast.error("You must be logged in to transcribe a recording?.");
-  }
-  if (!recording?.transcriptionId) {
-    return toast.error("You must transcribe the recording first.");
-  }
-
-  const transcriptionDocRef = doc(
-    db,
-    "transcriptions",
-    recording?.transcriptionId
-  );
-
-  const transcription = await getDoc(transcriptionDocRef);
-
-  if (!transcription.exists()) {
-    toast.warning("Transcription not found");
-    return;
-  }
-  const data = transcription.data() as Transcription;
-  toast.info(data.text);
-  return;
 };

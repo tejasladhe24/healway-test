@@ -34,13 +34,12 @@ import {
 } from "@/core/components/ui/alert-dialog";
 import { useRecordings } from "../hooks/use-recordings";
 import { Recording, Transcription } from "@/types";
-import { AudioRecorder } from "./recorder";
 import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
-import { auth, db } from "../lib/firebase-utils";
+import { db } from "../lib/firebase-utils";
 import { toast } from "sonner";
 import { cn } from "../lib/utils";
 import Link from "next/link";
-import { transcribeAudio } from "../client-side-handlers/transcribe";
+import { useAuth } from "../provider/session-provider";
 
 export const AudioRecordingsList = () => {
   const { recordings, loading, hasMore, loadMore } = useRecordings();
@@ -54,6 +53,8 @@ export const AudioRecordingsList = () => {
   );
   const [newName, setNewName] = useState("");
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const { user } = useAuth();
 
   const handlePlay = (id: string, url: string) => {
     if (currentlyPlaying === id) {
@@ -101,7 +102,7 @@ export const AudioRecordingsList = () => {
     setDeleteDialogOpen(true);
   };
   const handleRename = async () => {
-    if (!auth.currentUser) {
+    if (!user) {
       return toast.error("You must be logged in to rename a recording.");
     }
 
@@ -119,7 +120,7 @@ export const AudioRecordingsList = () => {
     }
   };
   const handleDelete = async () => {
-    if (!auth.currentUser) {
+    if (!user) {
       return toast.error("You must be logged in to delete a recording.");
     }
 
@@ -142,31 +143,6 @@ export const AudioRecordingsList = () => {
         toast.error("Failed to delete recording");
       }
     }
-  };
-
-  const openTranscription = async (recording: Recording) => {
-    if (!auth.currentUser) {
-      return toast.error("You must be logged in to transcribe a recording.");
-    }
-    if (!recording.transcriptionId) {
-      return toast.error("You must transcribe the recording first.");
-    }
-
-    const transcriptionDocRef = doc(
-      db,
-      "transcriptions",
-      recording.transcriptionId
-    );
-
-    const transcription = await getDoc(transcriptionDocRef);
-
-    if (!transcription.exists()) {
-      toast.warning("Transcription not found");
-      return;
-    }
-    const data = transcription.data() as Transcription;
-    toast.info(data.text);
-    return;
   };
 
   return (

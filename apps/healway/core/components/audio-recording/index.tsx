@@ -1,16 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import {
-  Play,
-  Pause,
-  Edit,
-  Trash2,
-  Loader2,
-  Text,
-  Check,
-  CheckCircle,
-} from "lucide-react";
+import { Play, Pause, Edit, Trash2, Loader2, CheckCircle } from "lucide-react";
 import { Button, buttonVariants } from "@/core/components/ui/button";
 import { Card, CardContent } from "@/core/components/ui/card";
 import {
@@ -37,13 +28,9 @@ import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../lib/firebase-utils";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
-import Link from "next/link";
 import { useRecording } from "../../hooks/use-recording";
-import {
-  openTranscription,
-  transcribeAudio,
-} from "../../client-side-handlers/transcribe";
 import { AudioRecordingTabView } from "./tab-view";
+import { useAuth } from "@/core/provider/session-provider";
 
 export const AudioRecording = ({ recordingId }: { recordingId: string }) => {
   const { loading, recording, transcription } = useRecording({ recordingId });
@@ -53,6 +40,7 @@ export const AudioRecording = ({ recordingId }: { recordingId: string }) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [newName, setNewName] = useState("");
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { user } = useAuth();
 
   const handlePlay = () => {
     // Toggle play/pause for current audio
@@ -70,11 +58,10 @@ export const AudioRecording = ({ recordingId }: { recordingId: string }) => {
     setRenameDialogOpen(true);
   };
 
-  const openDeleteDialog = (recording: Recording) => {
-    setDeleteDialogOpen(true);
-  };
+  const openDeleteDialog = () => setDeleteDialogOpen(true);
+
   const handleRename = async () => {
-    if (!auth.currentUser) {
+    if (!user) {
       return toast.error("You must be logged in to rename a recording?.");
     }
 
@@ -92,7 +79,7 @@ export const AudioRecording = ({ recordingId }: { recordingId: string }) => {
     }
   };
   const handleDelete = async () => {
-    if (!auth.currentUser) {
+    if (!user) {
       return toast.error("You must be logged in to delete a recording?.");
     }
 
@@ -179,7 +166,7 @@ export const AudioRecording = ({ recordingId }: { recordingId: string }) => {
                   <Button
                     variant="outline"
                     size="icon"
-                    onClick={() => openDeleteDialog(recording)}
+                    onClick={openDeleteDialog}
                     aria-label="Delete"
                     className="text-destructive hover:bg-destructive/10"
                   >
