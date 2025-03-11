@@ -89,7 +89,7 @@ export function NavUser() {
             <DropdownMenuItem>
               <Link
                 href={"/auth/sign-out"}
-                className="flex items-center gap-2 py-2 text-sm"
+                className="flex items-center gap-2 py-2 text-sm w-full"
               >
                 <LogOut />
                 Log out
