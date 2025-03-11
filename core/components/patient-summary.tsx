@@ -70,7 +70,7 @@ export default function PatientSummary({ data }: { data: Summary }) {
             </Button>
           </h3>
           <ul className="space-y-2">
-            {data.key_points.map((point, index) => (
+            {data.key_points?.map((point, index) => (
               <li key={index} className="flex items-start gap-2">
                 <span className="text-primary font-medium">•</span>
                 <span>{point}</span>
@@ -101,7 +101,7 @@ export default function PatientSummary({ data }: { data: Summary }) {
       <TabsContent value="condition" className="p-4">
         <h3 className="text-lg font-medium mb-3">Patient Condition</h3>
         <div className="flex flex-wrap gap-2">
-          {data.patient_condition.map((condition, index) => (
+          {data.patient_condition?.map((condition, index) => (
             <Badge
               key={index}
               variant="outline"

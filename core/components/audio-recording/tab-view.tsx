@@ -5,12 +5,9 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/core/components/ui/card";
-import { Input } from "@/core/components/ui/input";
-import { Label } from "@/core/components/ui/label";
 import {
   Tabs,
   TabsContent,

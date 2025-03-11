@@ -1,7 +1,7 @@
 "use client";
 
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { auth, db } from "../lib/firebase-utils";
+import { db } from "../lib/firebase-utils";
 import { toast } from "sonner";
 import { Summary, Transcription } from "@/types";
 import { User } from "firebase/auth";
@@ -26,23 +26,19 @@ export const summarizeText = async (
 
     data = transcript.data() as Transcription;
 
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_LLM_SERVER_URL}/api/summarize/with-text`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          conversation: data.text,
-        }),
-      }
-    );
-
-    console.log("response", response);
+    const response = await fetch(`/api/summarize`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        conversation: data.text,
+      }),
+    });
 
     if (response.ok) {
       const data = (await response.json()) as Summary;
+      console.log("response", data);
       const docRef = doc(db, "transcriptions", transcriptionId);
       await updateDoc(docRef, { summary: data });
       toast.info(`Summary created for ${transcriptionId}`);
