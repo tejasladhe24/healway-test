@@ -6,30 +6,35 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
+    "setup": {
+      "dependsOn": ["^setup"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "cache": false,
+      "persistent": true
+    },
     "dev": {
       "cache": false,
       "persistent": true
     },
     "start": {
+      "dependsOn": ["^start"],
       "cache": false,
       "persistent": true
     }
   },
-  "globalDependencies": ["pyproject.toml", "package.json", "turbo.json"],
+  "globalDependencies": ["package.json", "turbo.json"],
   "globalEnv": [
-    "AUTH_DATABASE_URL",
-    "APP_DATABASE_URL",
-    "REGISTRY_DATABASE_URL",
-    "AUTH_SECRET",
-    "AXON_APP_URL",
-    "NEXT_PUBLIC_AXON_APP_URL",
-    "DOCS_APP_URL",
-    "NEXT_PUBLIC_DOCS_APP_URL",
-    "AUTH_APP_URL",
-    "NEXT_PUBLIC_AUTH_APP_URL",
-    "DIAGRAMS_APP_URL",
-    "NEXT_PUBLIC_DIAGRAMS_APP_URL",
-    "BACKEND_APP_URL",
-    "NEXT_PUBLIC_BACKEND_APP_URL"
+    "NEXT_PUBLIC_FIREBASE_apiKey",
+    "NEXT_PUBLIC_FIREBASE_authDomain",
+    "NEXT_PUBLIC_FIREBASE_projectId",
+    "NEXT_PUBLIC_FIREBASE_storageBucket",
+    "NEXT_PUBLIC_FIREBASE_messagingSenderId",
+    "NEXT_PUBLIC_FIREBASE_appId",
+    "NEXT_PUBLIC_ELEVENLABS_API_KEY",
+    "OPENAI_API_KEY",
+    "HEALWAY_APP_URL",
+    "NEXT_PUBLIC_HEALWAY_APP_URL",
+    "LLM_SERVER_URL",
+    "NEXT_PUBLIC_LLM_SERVER_URL"
   ]
 }

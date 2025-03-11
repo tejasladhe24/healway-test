@@ -3,7 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "setup": "poetry install",
     "dev": "uvicorn main:app --reload --port 8000",
     "start": "uvicorn main:app --reload --port 8000 --workers 4"
+  },
+  "dependencies": {
+    "concurrently": "^9.1.2"
   }
 }
